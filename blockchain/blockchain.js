@@ -1,8 +1,9 @@
 // "use strict";
 var blake2 = require("blake2");
+const fs = require("fs");
 
 class Vote {
-  constructor(from, to, timestamp) {
+  constructor({ from, to, timestamp }) {
     this.from = from;
     this.to = to;
     this.timestamp = timestamp;
@@ -22,7 +23,7 @@ class Vote {
 }
 
 class Block {
-  constructor(timestamp, votes, previousHash, count) {
+  constructor({ timestamp, votes, previousHash, count }) {
     this.timestamp = timestamp;
     this.votes = votes;
     this.previousHash = previousHash;
@@ -79,12 +80,12 @@ class Block {
 
 class BlockChain {
   constructor() {
-    this.genesis = new Block(
-      Date.now(),
-      [new Vote("genesis", "Genesis", Date.now())],
-      "Genesis",
-      {}
-    );
+    this.genesis = new Block({
+      timestamp: Date.now(),
+      votes: [new Vote("genesis", "Genesis", Date.now())],
+      previousHash: "Genesis",
+      count: {},
+    });
     this.genesis.generateHash();
     this.blocks = [this.genesis];
   }
@@ -108,7 +109,12 @@ class BlockChain {
   }
 
   generateNewBlock(votes, previousHash, count) {
-    var block = new Block(Date.now(), votes, previousHash, count);
+    var block = new Block({
+      timestamp: Date.now(),
+      votes: votes,
+      previousHash: previousHash,
+      count: count,
+    });
     block.generateCounts();
     block.generateHash();
     return block;
@@ -132,14 +138,37 @@ class BlockChain {
   }
 }
 
+// ============== BLOCK VERIFY CHECK ==========
+
 const a = new BlockChain();
 
 a.addNewBlockToChain(
-  [new Vote("b", "a", Date.now()), new Vote("d", "c", Date.now())],
+  [
+    new Vote({ from: "b", to: "a", timestamp: Date.now() }),
+    new Vote({ from: "d", to: "c", timestamp: Date.now() }),
+  ],
   a.getTotalVotesCount()
 );
 
-a.addNewBlockToChain([new Vote("g", "a", Date.now())], a.getTotalVotesCount());
+a.addNewBlockToChain(
+  [new Vote({ from: "g", to: "a", timestamp: Date.now() })],
+  a.getTotalVotesCount()
+);
 console.log(a, a.getTotalVotesCount());
 
-// ============== BLOCK VERIFY CHECK ==========
+// var b = serialize(ChainSchema, a);
+
+// console.log(b);
+
+// fs.writeFileSync("./a", JSON.stringify(serialize(a)));
+
+// read = deserialize(BlockChain, read);
+
+// console.log(read.getTotalVotesCount());
+
+// read.addNewBlockToChain(
+//   [new Vote("f", "a", Date.now())],
+//   read.getTotalVotesCount()
+// );
+
+// console.log(read.blocks[0] instanceof Block);

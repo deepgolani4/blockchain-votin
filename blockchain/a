@@ -1,0 +1,77 @@
+{
+    "genesis": {
+        "timestamp": 1616934655064,
+        "votes": [
+            {
+                "from": "genesis",
+                "to": "Genesis",
+                "timestamp": 1616934655064
+            }
+        ],
+        "previousHash": "Genesis",
+        "count": {
+            "a": 2,
+            "c": 1
+        },
+        "totalVotesThisBlock": 1,
+        "currentHash": "a353aacd91b07e7a4693cfd8253ea258b5eb83c3ea0a5724c979db316cff1f8710e6d09d1b44f6f1575c922ca7f385d8ce281bfe3b34cbaff84046aba025bab3"
+    },
+    "blocks": [
+        {
+            "timestamp": 1616934655064,
+            "votes": [
+                {
+                    "from": "genesis",
+                    "to": "Genesis",
+                    "timestamp": 1616934655064
+                }
+            ],
+            "previousHash": "Genesis",
+            "count": {
+                "a": 2,
+                "c": 1
+            },
+            "totalVotesThisBlock": 1,
+            "currentHash": "a353aacd91b07e7a4693cfd8253ea258b5eb83c3ea0a5724c979db316cff1f8710e6d09d1b44f6f1575c922ca7f385d8ce281bfe3b34cbaff84046aba025bab3"
+        },
+        {
+            "timestamp": 1616934655065,
+            "votes": [
+                {
+                    "from": "b",
+                    "to": "a",
+                    "timestamp": 1616934655065
+                },
+                {
+                    "from": "d",
+                    "to": "c",
+                    "timestamp": 1616934655065
+                }
+            ],
+            "previousHash": "a353aacd91b07e7a4693cfd8253ea258b5eb83c3ea0a5724c979db316cff1f8710e6d09d1b44f6f1575c922ca7f385d8ce281bfe3b34cbaff84046aba025bab3",
+            "count": {
+                "a": 2,
+                "c": 1
+            },
+            "totalVotesThisBlock": 2,
+            "currentHash": "27a23f85f59b2a4ca7a8986261f17334946c597659797a34dc99bf33945ff4c9bbf55893994f8f18a8643de4dbf61eba68c1c9aba216edf12fe20a96aaa1748d"
+        },
+        {
+            "timestamp": 1616934655068,
+            "votes": [
+                {
+                    "from": "g",
+                    "to": "a",
+                    "timestamp": 1616934655068
+                }
+            ],
+            "previousHash": "27a23f85f59b2a4ca7a8986261f17334946c597659797a34dc99bf33945ff4c9bbf55893994f8f18a8643de4dbf61eba68c1c9aba216edf12fe20a96aaa1748d",
+            "count": {
+                "a": 2,
+                "c": 1
+            },
+            "totalVotesThisBlock": 1,
+            "currentHash": "cfb434f6c7c87f4ca66ffb520dd5e402d72c4f5ac26ea87a850f63c694e83fc7f86298fee207d3cbde87c843af1fbb7de78294f644391f40c774460f3bd4d283"
+        }
+    ]
+}

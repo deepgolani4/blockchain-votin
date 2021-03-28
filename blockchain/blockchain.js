@@ -23,12 +23,15 @@ class Vote {
 }
 
 class Block {
-  constructor({ timestamp, votes, previousHash, count }) {
+  constructor({ timestamp, votes, previousHash, count, currentHash }) {
     this.timestamp = timestamp;
-    this.votes = votes;
+    this.votes = votes.map((vote) => {
+      return new Vote(vote);
+    });
     this.previousHash = previousHash;
     this.count = count;
     this.totalVotesThisBlock = votes.length;
+    this.currentHash = currentHash;
   }
 
   #getData() {
@@ -79,15 +82,25 @@ class Block {
 }
 
 class BlockChain {
-  constructor() {
-    this.genesis = new Block({
-      timestamp: Date.now(),
-      votes: [new Vote("genesis", "Genesis", Date.now())],
-      previousHash: "Genesis",
-      count: {},
-    });
-    this.genesis.generateHash();
-    this.blocks = [this.genesis];
+  constructor({ genesis, blocks }) {
+    if (!(genesis && blocks)) {
+      console.log("Suc1");
+      this.genesis = new Block({
+        timestamp: Date.now(),
+        votes: [
+          new Vote({ from: "genesis", to: "Genesis", timestamp: Date.now() }),
+        ],
+        previousHash: "Genesis",
+        count: {},
+      });
+      this.genesis.generateHash();
+      this.blocks = [this.genesis];
+    } else {
+      this.genesis = new Block(genesis);
+      this.blocks = blocks.map((block) => {
+        return new Block(block);
+      });
+    }
   }
 
   proofOfWork() {
@@ -140,29 +153,39 @@ class BlockChain {
 
 // ============== BLOCK VERIFY CHECK ==========
 
-const a = new BlockChain();
+// const a = new BlockChain({ genesis: null, blocks: null });
 
-a.addNewBlockToChain(
-  [
-    new Vote({ from: "b", to: "a", timestamp: Date.now() }),
-    new Vote({ from: "d", to: "c", timestamp: Date.now() }),
-  ],
-  a.getTotalVotesCount()
+// a.addNewBlockToChain(
+//   [
+//     new Vote({ from: "b", to: "a", timestamp: Date.now() }),
+//     new Vote({ from: "d", to: "c", timestamp: Date.now() }),
+//   ],
+//   a.getTotalVotesCount()
+// );
+
+// a.addNewBlockToChain(
+//   [new Vote({ from: "g", to: "a", timestamp: Date.now() })],
+//   a.getTotalVotesCount()
+// );
+
+// console.log(a, a.blocks[2].votes);
+
+// fs.writeFileSync("./a", JSON.stringify(a));
+
+var read = fs.readFileSync("./a");
+
+read = JSON.parse(read);
+
+var b = new BlockChain(read);
+
+console.log(b.getTotalVotesCount());
+
+b.addNewBlockToChain(
+  [new Vote({ from: "f", to: "a", timestamp: Date.now() })],
+  b.getTotalVotesCount()
 );
 
-a.addNewBlockToChain(
-  [new Vote({ from: "g", to: "a", timestamp: Date.now() })],
-  a.getTotalVotesCount()
-);
-console.log(a, a.getTotalVotesCount());
-
-// var b = serialize(ChainSchema, a);
-
-// console.log(b);
-
-// fs.writeFileSync("./a", JSON.stringify(serialize(a)));
-
-// read = deserialize(BlockChain, read);
+console.log(b.getTotalVotesCount());
 
 // console.log(read.getTotalVotesCount());
 

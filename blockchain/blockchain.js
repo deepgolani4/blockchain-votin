@@ -1,6 +1,5 @@
 // "use strict";
 var blake2 = require("blake2");
-const fs = require("fs");
 
 class Vote {
   constructor({ from, to, timestamp }) {
@@ -172,20 +171,22 @@ class BlockChain {
 
 // fs.writeFileSync("./a", JSON.stringify(a));
 
-var read = fs.readFileSync("./a");
+// var read = fs.readFileSync("./a");
 
-read = JSON.parse(read);
+// read = JSON.parse(read);
 
-var b = new BlockChain(read);
+// var b = new BlockChain(read);
 
-console.log(b.getTotalVotesCount());
+// console.log(b.getTotalVotesCount());
 
-b.addNewBlockToChain(
-  [new Vote({ from: "f", to: "a", timestamp: Date.now() })],
-  b.getTotalVotesCount()
-);
+// b.addNewBlockToChain(
+//   [new Vote({ from: "f", to: "a", timestamp: Date.now() })],
+//   b.getTotalVotesCount()
+// );
 
-console.log(b.getTotalVotesCount());
+// console.log(b.getTotalVotesCount());
+
+// fs.writeFileSync("./a", JSON.stringify(b));
 
 // console.log(read.getTotalVotesCount());
 
@@ -195,3 +196,9 @@ console.log(b.getTotalVotesCount());
 // );
 
 // console.log(read.blocks[0] instanceof Block);
+
+module.exports = {
+  Block: Block,
+  Vote: Vote,
+  BlockChain: BlockChain,
+};

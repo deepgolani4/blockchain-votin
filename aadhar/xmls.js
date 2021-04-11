@@ -1,7 +1,7 @@
 const builder = require("xmlbuilder");
 const crypto = require("crypto");
 
-const { encryptXML } = require("./encryption");
+const { encryptXML } = require("./crypto");
 const { version, publicData } = require("./const");
 
 const buildPIDBlock = () => {
@@ -16,23 +16,11 @@ const buildPIDBlock = () => {
 
   pid.element("Demo");
 
-  return pid.end();
+  return pid.end().toString();
 };
 
 const buildReqXML = (uid) => {
-  // var xml = builder.create("Auth");
-  var sKey = crypto.randomBytes(32);
-
-  // xml.attribute({
-  //   uid: uid,
-  //   rc: "Y",
-  //   tid: publicData.tid,
-  //   ac: publicData.ac,
-  //   sa: publicData.sa,
-  //   ver: version,
-  //   txn: "", //Check
-  //   lk: publicData.lk,
-  // });
+  var sKey = crypto.randomBytes(32).toString();
 
   const pid = buildPIDBlock(); //Encrypted PID Block
 
@@ -73,31 +61,8 @@ const buildReqXML = (uid) => {
   };
 
   var xml = builder.create(xmlObj).end({ pretty: true });
-
   console.log(xml);
-  // xml.ele("Uses").attribute({
-  //   pi: "y",
-  //   pa: "n",
-  //   pfa: "n",
-  //   bio: "n",
-  //   bt: "n",
-  //   pin: "n",
-  //   otp: "n",
-  // });
-  // xml.ele("Meta");
-  // xml.ele("Skey").attribute({
-  //   ci: publicData.certExpCI,
-  // }), encryptedPid.encryptedSKey);
-  // xml.ele(
-  //   "Data",
-  //   {
-  //     type: "X",
-  //   },
-  //   encryptedPid.encryptedXML
-  // );
-  // xml.ele("Hmac", null, encryptedPid.hmacXML).end({ pretty: true });
-
-  // console.log(a.end({ pretty: true }));
+  return xml;
 };
 
 buildReqXML();

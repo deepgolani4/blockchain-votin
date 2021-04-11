@@ -1,8 +1,28 @@
 const builder = require("xmlbuilder");
+const crypto = require("crypto");
+
+const { encryptXML } = require("./encryption");
 const { version, publicData } = require("./const");
+
+const buildPIDBlock = () => {
+  var pid = builder.create("Pid");
+
+  const date = new Date(Date.now());
+  pid.attribute({
+    ver: "2.0",
+    ts: date.toISOString().slice(0, 19),
+    wadh: "",
+  });
+
+  pid.element("Demo");
+
+  pid.end();
+  return pid;
+};
 
 const buildReqXML = (uid) => {
   var xml = builder.create("Auth");
+  var sKey = crypto.randomBytes(32);
 
   xml.attribute({
     uid: uid,
@@ -15,7 +35,9 @@ const buildReqXML = (uid) => {
     lk: publicData.lk,
   });
 
-  const pid = "tryfughjbnmlmnyfg"; //Encrypted PID Block
+  const pid = buildPIDBlock(); //Encrypted PID Block
+
+  const encryptedPid = encryptXML(pid, sKey);
 
   xml
     .ele(
@@ -37,17 +59,16 @@ const buildReqXML = (uid) => {
       {
         ci: publicData.certExpCI,
       },
-      "Encrypted Session Key"
+      encryptedPid.encryptedSKey
     )
     .ele(
       "Data",
       {
         type: "X",
       },
-      "Encrypted PID Block"
+      encryptedPid.encryptedXML
     )
-    .ele("Hmac", null, "HMAC of encrypted PID Block")
-    .ele("Signature", null, "Digigtal Sign of PID")
+    .ele("Hmac", null, encryptedPid.hmacXML)
     .end();
 
   console.log(xml.txt());

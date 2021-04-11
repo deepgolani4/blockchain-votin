@@ -16,62 +16,88 @@ const buildPIDBlock = () => {
 
   pid.element("Demo");
 
-  pid.end();
-  return pid;
+  return pid.end();
 };
 
 const buildReqXML = (uid) => {
-  var xml = builder.create("Auth");
+  // var xml = builder.create("Auth");
   var sKey = crypto.randomBytes(32);
 
-  xml.attribute({
-    uid: uid,
-    rc: "Y",
-    tid: publicData.tid,
-    ac: publicData.ac,
-    sa: publicData.sa,
-    ver: version,
-    txn: "", //Check
-    lk: publicData.lk,
-  });
+  // xml.attribute({
+  //   uid: uid,
+  //   rc: "Y",
+  //   tid: publicData.tid,
+  //   ac: publicData.ac,
+  //   sa: publicData.sa,
+  //   ver: version,
+  //   txn: "", //Check
+  //   lk: publicData.lk,
+  // });
 
   const pid = buildPIDBlock(); //Encrypted PID Block
 
   const encryptedPid = encryptXML(pid, sKey);
 
-  xml
-    .ele(
-      "Uses",
-      {
-        pi: "y",
-        pa: "n",
-        pfa: "n",
-        bio: "n",
-        bt: "n",
-        pin: "n",
-        otp: "n",
+  const xmlObj = {
+    Auth: {
+      "@uid": uid,
+      "@rc": "Y",
+      "@tid": publicData.tid,
+      "@ac": publicData.ac,
+      "@sa": publicData.sa,
+      "@ver": version,
+      "@txn": "", //Check
+      "@lk": publicData.lk,
+      Uses: {
+        "@pi": "y",
+        "@pa": "n",
+        "@pfa": "n",
+        "@bio": "n",
+        "@bt": "n",
+        "@pin": "n",
+        "@otp": "n",
       },
-      null
-    )
-    .ele("Meta", {}, null)
-    .ele(
-      "Skey",
-      {
-        ci: publicData.certExpCI,
+      Meta: {},
+      Skey: {
+        "@ci": publicData.certExpCI,
+        "#text": encryptedPid.encryptedSKey,
       },
-      encryptedPid.encryptedSKey
-    )
-    .ele(
-      "Data",
-      {
-        type: "X",
+      Data: {
+        "@type": "X",
+        "#text": encryptedPid.encryptedXML,
       },
-      encryptedPid.encryptedXML
-    )
-    .ele("Hmac", null, encryptedPid.hmacXML)
-    .end();
+      Hmac: {
+        "#text": encryptedPid.hmacXML,
+      },
+    },
+  };
 
-  console.log(xml.txt());
+  var xml = builder.create(xmlObj).end({ pretty: true });
+
+  console.log(xml);
+  // xml.ele("Uses").attribute({
+  //   pi: "y",
+  //   pa: "n",
+  //   pfa: "n",
+  //   bio: "n",
+  //   bt: "n",
+  //   pin: "n",
+  //   otp: "n",
+  // });
+  // xml.ele("Meta");
+  // xml.ele("Skey").attribute({
+  //   ci: publicData.certExpCI,
+  // }), encryptedPid.encryptedSKey);
+  // xml.ele(
+  //   "Data",
+  //   {
+  //     type: "X",
+  //   },
+  //   encryptedPid.encryptedXML
+  // );
+  // xml.ele("Hmac", null, encryptedPid.hmacXML).end({ pretty: true });
+
+  // console.log(a.end({ pretty: true }));
 };
 
 buildReqXML();

@@ -19,6 +19,7 @@
     "mongoose": "^5.11.18",
     "node-rsa": "^1.1.1",
     "path": "^0.12.7",
+    "xml-crypto": "^2.1.1",
     "xmlbuilder": "^15.1.1"
   },
   "devDependencies": {

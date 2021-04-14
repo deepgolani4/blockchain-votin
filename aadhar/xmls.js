@@ -1,8 +1,9 @@
 const builder = require("xmlbuilder");
 const crypto = require("crypto");
-
+const { SignedXml, FileKeyInfo } = require("xml-crypto");
+const fs = require("fs");
 const { encryptXML } = require("./crypto");
-const { version, publicData } = require("./const");
+const { version, publicData, keys } = require("./const");
 
 const buildPIDBlock = () => {
   var pid = builder.create("Pid");
@@ -61,8 +62,56 @@ const buildReqXML = (uid) => {
   };
 
   var xml = builder.create(xmlObj).end({ pretty: true });
-  console.log(xml);
+  // console.log(xml);
   return xml;
 };
 
-buildReqXML();
+const signXML = (xml) => {
+  var subjectName =
+    "CN=Public AUA for Staging Services,OU=Staging Services,O=Public AUA,L=Bangalore,ST=KA,C=IN";
+
+  function AadhaarKeyInfo() {
+    this.getKeyInfo = function (key, prefix) {
+      var x509XML = builder
+        .create(
+          "X509Data",
+          { version: "2.0", encoding: "UTF-8", standalone: true },
+          { pubID: null, sysID: null },
+          {
+            allowSurrogateChars: false,
+            skipNullAttributes: false,
+            headless: true,
+            ignoreDecorators: false,
+            separateArrayItems: false,
+            noDoubleEncoding: false,
+            stringify: {},
+          }
+        )
+        .ele("X509Certificate", null, keys.pkcs12Pub)
+        .up()
+        .ele("X509SubjectName", null, subjectName)
+        .end();
+      return x509XML;
+    };
+    this.getKey = function (keyInfo) {};
+  }
+
+  var sig = new SignedXml();
+  sig.signingKey = fs.readFileSync(__dirname + "/../aadhar_keys/key.pem");
+  sig.addReference(
+    "//*[local-name(.)='Auth']",
+    ["http://www.w3.org/2000/09/xmldsig#enveloped-signature"],
+    "http://www.w3.org/2000/09/xmldsig#sha1",
+    "",
+    "",
+    "",
+    true
+  );
+  sig.keyInfoProvider = new AadhaarKeyInfo();
+
+  sig.computeSignature(xml);
+
+  return sig.getSignedXml();
+};
+
+console.log(signXML(buildReqXML()));

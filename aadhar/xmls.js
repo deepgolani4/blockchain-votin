@@ -114,4 +114,10 @@ const signXML = (xml) => {
   return sig.getSignedXml();
 };
 
-console.log(signXML(buildReqXML()));
+module.exports = (uid, bday) => {
+  const xml = buildReqXML(uid);
+  console.log(xml);
+  const signedXML = signXML(xml);
+  console.log(signedXML);
+  return signedXML;
+};

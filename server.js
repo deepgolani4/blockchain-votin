@@ -1,28 +1,21 @@
-const express = require('express');
-const path = require('path');
-const mongoose = require('mongoose');
+const express = require("express");
+const path = require("path");
 
 const app = express();
-const mongoURL = "mongodb://127.0.0.1:27017/test";
-const index = require('./routes/index.route')
-
+const index = require("./routes/index.route");
 
 app.use(express.json());
-app.use(express.urlencoded({
-    extended:true
-}));
-app.use('/',index);
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
+app.use("/", index);
 
+const port = process.env.PORT || 5000;
 
-mongoose.connect(mongoURL,{useNewUrlParser: true});
-mongoose.connection.once('open',()=>{
-    console.log('MongoDB connected');
-});
-
-const port = process.env.PORT || 3000;
-
-app.listen(port,(err)=>{
-    if(!err){
-        console.log(`Listening on port ${port}`);
-    }
+app.listen(port, (err) => {
+  if (!err) {
+    console.log(`Listening on port ${port}`);
+  }
 });

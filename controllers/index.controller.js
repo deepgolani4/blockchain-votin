@@ -1,18 +1,14 @@
 const reqBuild = require("../aadhar/xmls");
 const jwtSign = require("../helpers/jwtSign");
+const genLucky = require("../helpers/luckyNumGen");
 module.exports = {
   verifyAadhar: (req, res) => {
     const { uid, bday } = req.body;
     console.log(uid, bday);
-    var lucky = parseInt(
-      `${uid[11 - parseInt(bday[0])]}${uid[11 - parseInt(bday[3])]}`
-    );
-
-    lucky *= Date.now();
-    lucky %= parseInt(uid.slice(0, 6));
-
+    const lucky = genLucky(req.body);
     const tkn = jwtSign({
-      uid: uid,
+      uid,
+      bday,
       num: Math.random().toFixed(2),
     });
 

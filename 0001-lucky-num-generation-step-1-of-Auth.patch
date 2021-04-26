@@ -1,0 +1,146 @@
+From 087edbbede3fb3a6029b0221dbe47d131609d539 Mon Sep 17 00:00:00 2001
+From: Nimish Shah <nimishshah2000@gmail.com>
+Date: Tue, 27 Apr 2021 01:17:29 +0530
+Subject: [PATCH] lucky num generation, step 1 of Auth
+
+---
+ .env                            |  1 +
+ controllers/index.controller.js | 73 ++++++++++++++++-----------------
+ helpers/jwtSign.js              | 11 +++++
+ package.json                    |  2 +
+ 4 files changed, 50 insertions(+), 37 deletions(-)
+ create mode 100644 .env
+ create mode 100644 helpers/jwtSign.js
+
+diff --git a/.env b/.env
+new file mode 100644
+index 0000000..ab1e1c5
+--- /dev/null
++++ b/.env
+@@ -0,0 +1 @@
++JWT_SECRET=secret
+\ No newline at end of file
+diff --git a/controllers/index.controller.js b/controllers/index.controller.js
+index 8bdd509..157afe2 100644
+--- a/controllers/index.controller.js
++++ b/controllers/index.controller.js
+@@ -1,49 +1,48 @@
+ const reqBuild = require("../aadhar/xmls");
+-const axios = require("axios").default;
++const jwtSign = require("../helpers/jwtSign");
+ module.exports = {
+   verifyAadhar: (req, res) => {
+     const { uid, bday } = req.body;
+-    const xml = reqBuild(uid, bday);
++    console.log(uid, bday);
++    var lucky = parseInt(
++      `${uid[11 - parseInt(bday[0])]}${uid[11 - parseInt(bday[3])]}`
++    );
++
++    lucky *= Date.now();
++    lucky %= parseInt(uid.slice(0, 6));
++
++    const tkn = jwtSign({
++      uid: uid,
++      num: Math.random().toFixed(2),
++    });
++
+     console.log(
+       req.body,
+       `http://www.uidai.gov.in/authentication/uid-auth-request/2.0/public/${uid[0]}/${uid[1]}/MMxNu7a6589B5x5RahDW-zNP7rhGbZb5HsTRwbi-VVNxkoFmkHGmYKM`
+     );
+-    axios
+-      .post(
+-        `http://www.uidai.gov.in/authentication/uid-auth-request/2.0/public/${uid[0]}/${uid[1]}/MMxNu7a6589B5x5RahDW-zNP7rhGbZb5HsTRwbi-VVNxkoFmkHGmYKM`,
+-        xml,
+-        {
+-          headers: {
+-            "Content-Type": "text/xml",
+-          },
+-        }
+-      )
+-      .then((res_) => {
+-        res.send(res_.data);
+-      })
+-      .catch((err) => {
+-        console.log(err);
+-      });
+-    // fetch(
+-    //   `http://auth.uidai.gov.in/2.0/public/${uid[0]}/${uid[1]}/MMxNu7a6589B5x5RahDW-zNP7rhGbZb5HsTRwbi-VVNxkoFmkHGmYKM`,
+-    //   {
+-    //     method: "POST",
+-    //     body: xml,
+-    //     headers: {
+-    //       "Content-Type": "application/xml",
+-    //     },
+-    //   }
+-    // )
+-    //   .then((res) => res.text())
+-    //   .then((data) => console.log(data))
+-    //   .catch((err) => console.log(err));
+-
+-    // xhr.setRequestHeader("Content-Type", "application/xml");
+ 
+-    // xhr.send(xml);
++    res.status(200).send({
++      lucky,
++      token: tkn,
++      ts: Date.now(),
++    });
++    // axios
++    //   .post(
++    //     `http://www.uidai.gov.in/authentication/uid-auth-request/2.0/public/${uid[0]}/${uid[1]}/MMxNu7a6589B5x5RahDW-zNP7rhGbZb5HsTRwbi-VVNxkoFmkHGmYKM`,
++    //     xml,
++    //     {
++    //       headers: {
++    //         "Content-Type": "text/xml",
++    //       },
++    //     }
++    //   )
++    //   .then((res_) => {
++    //     res.send(res_.data);
++    //   })
++    //   .catch((err) => {
++    //     console.log(err);
++    //   });
+ 
+-    // xhr.onreadystatechange = () => {
+-    //   console.log(xhr.responseText);
+-    // };
++    res.status(200).send("done");
+   },
+ };
+diff --git a/helpers/jwtSign.js b/helpers/jwtSign.js
+new file mode 100644
+index 0000000..33bb276
+--- /dev/null
++++ b/helpers/jwtSign.js
+@@ -0,0 +1,11 @@
++const jwt = require("jsonwebtoken");
++require("dotenv").config();
++const secret = process.env.JWT_SECRET;
++
++module.exports = (data) => {
++  console.log(data, secret);
++  const tkn = jwt.sign(data, secret);
++
++  console.log(tkn);
++  return tkn;
++};
+diff --git a/package.json b/package.json
+index 3c61e9a..d3e8ec2 100644
+--- a/package.json
++++ b/package.json
+@@ -16,7 +16,9 @@
+     "cookie-parser": "^1.4.5",
+     "crypto": "^1.0.1",
+     "crypto-js": "^4.0.0",
++    "dotenv": "^8.2.0",
+     "express": "^4.17.1",
++    "jsonwebtoken": "^8.5.1",
+     "node-rsa": "^1.1.1",
+     "path": "^0.12.7",
+     "xml-crypto": "^2.1.1",
+-- 
+2.31.1
+

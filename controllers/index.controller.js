@@ -1,49 +1,48 @@
 const reqBuild = require("../aadhar/xmls");
-const axios = require("axios").default;
+const jwtSign = require("../helpers/jwtSign");
 module.exports = {
   verifyAadhar: (req, res) => {
     const { uid, bday } = req.body;
-    const xml = reqBuild(uid, bday);
+    console.log(uid, bday);
+    var lucky = parseInt(
+      `${uid[11 - parseInt(bday[0])]}${uid[11 - parseInt(bday[3])]}`
+    );
+
+    lucky *= Date.now();
+    lucky %= parseInt(uid.slice(0, 6));
+
+    const tkn = jwtSign({
+      uid: uid,
+      num: Math.random().toFixed(2),
+    });
+
     console.log(
       req.body,
       `http://www.uidai.gov.in/authentication/uid-auth-request/2.0/public/${uid[0]}/${uid[1]}/MMxNu7a6589B5x5RahDW-zNP7rhGbZb5HsTRwbi-VVNxkoFmkHGmYKM`
     );
-    axios
-      .post(
-        `http://www.uidai.gov.in/authentication/uid-auth-request/2.0/public/${uid[0]}/${uid[1]}/MMxNu7a6589B5x5RahDW-zNP7rhGbZb5HsTRwbi-VVNxkoFmkHGmYKM`,
-        xml,
-        {
-          headers: {
-            "Content-Type": "text/xml",
-          },
-        }
-      )
-      .then((res_) => {
-        res.send(res_.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    // fetch(
-    //   `http://auth.uidai.gov.in/2.0/public/${uid[0]}/${uid[1]}/MMxNu7a6589B5x5RahDW-zNP7rhGbZb5HsTRwbi-VVNxkoFmkHGmYKM`,
-    //   {
-    //     method: "POST",
-    //     body: xml,
-    //     headers: {
-    //       "Content-Type": "application/xml",
-    //     },
-    //   }
-    // )
-    //   .then((res) => res.text())
-    //   .then((data) => console.log(data))
-    //   .catch((err) => console.log(err));
 
-    // xhr.setRequestHeader("Content-Type", "application/xml");
+    res.status(200).send({
+      lucky,
+      token: tkn,
+      ts: Date.now(),
+    });
+    // axios
+    //   .post(
+    //     `http://www.uidai.gov.in/authentication/uid-auth-request/2.0/public/${uid[0]}/${uid[1]}/MMxNu7a6589B5x5RahDW-zNP7rhGbZb5HsTRwbi-VVNxkoFmkHGmYKM`,
+    //     xml,
+    //     {
+    //       headers: {
+    //         "Content-Type": "text/xml",
+    //       },
+    //     }
+    //   )
+    //   .then((res_) => {
+    //     res.send(res_.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
 
-    // xhr.send(xml);
-
-    // xhr.onreadystatechange = () => {
-    //   console.log(xhr.responseText);
-    // };
+    res.status(200).send("done");
   },
 };

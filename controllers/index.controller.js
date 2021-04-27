@@ -1,5 +1,5 @@
 const reqBuild = require("../aadhar/xmls");
-const jwtSign = require("../helpers/jwtSign");
+const jwtSign = require("../helpers/jwtSign").sign;
 const genLucky = require("../helpers/luckyNumGen");
 const pow = require("../helpers/modularExp");
 module.exports = {

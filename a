@@ -1,0 +1,57 @@
+{
+  "genesis": {
+    "timestamp": 1619549220156,
+    "votes": [
+      {
+        "from": "genesis",
+        "to": "Genesis",
+        "timestamp": 1619549220156
+      }
+    ],
+    "previousHash": "Genesis",
+    "count": {
+      "a": 2
+    },
+    "totalVotesThisBlock": 1,
+    "currentHash": "120243756e5dc9e6e724b66565be2948e4f971ee9d213f81a9fbc3bac0eaef0957d51af10c9cb8bb6a8168bb867b9d31b222c3034388d5d7bafce6d0fe086bd8"
+  },
+  "blocks": [
+    {
+      "timestamp": 1619549220156,
+      "votes": [
+        {
+          "from": "genesis",
+          "to": "Genesis",
+          "timestamp": 1619549220156
+        }
+      ],
+      "previousHash": "Genesis",
+      "count": {
+        "a": 2
+      },
+      "totalVotesThisBlock": 1,
+      "currentHash": "120243756e5dc9e6e724b66565be2948e4f971ee9d213f81a9fbc3bac0eaef0957d51af10c9cb8bb6a8168bb867b9d31b222c3034388d5d7bafce6d0fe086bd8"
+    },
+    {
+      "timestamp": 1619549220158,
+      "votes": [
+        {
+          "from": "Tanish",
+          "to": "a",
+          "timestamp": 1619547030817
+        },
+        {
+          "from": "Nimish",
+          "to": "a",
+          "timestamp": 1619547030817
+        }
+      ],
+      "previousHash": "120243756e5dc9e6e724b66565be2948e4f971ee9d213f81a9fbc3bac0eaef0957d51af10c9cb8bb6a8168bb867b9d31b222c3034388d5d7bafce6d0fe086bd8",
+      "count": {
+        "a": 2
+      },
+      "totalVotesThisBlock": 2,
+      "currentHash": "d8b429d068304cd733c53852e8b06be025b315f75a97ef886174fe51a3f5860a1cd4cfd8e584f08508cae9a37f0e2f5a553ab0f589c83ad58f662921a61627cf"
+    }
+  ]
+}

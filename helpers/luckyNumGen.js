@@ -1,3 +1,9 @@
+/**
+ *
+ * @param {bday and uid} reqBody
+ * @returns 6 digit lucky num
+ */
+
 module.exports = (reqBody) => {
   var { bday, uid } = reqBody;
 

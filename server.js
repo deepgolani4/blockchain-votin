@@ -3,7 +3,7 @@ const path = require("path");
 
 const app = express();
 const index = require("./routes/index.route");
-
+const secured = require("./routes/secured.route");
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -11,6 +11,7 @@ app.use(
   })
 );
 app.use("/", index);
+app.use("/secured", secured);
 
 const port = process.env.PORT || 5000;
 

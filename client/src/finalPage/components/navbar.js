@@ -11,13 +11,27 @@ import {
   IconButton,
   withStyles
 } from "@material-ui/core";
+import {
+  List,
+  ListItem,
+  Dialog,
+  TextField,
+  DialogContent,
+  Avatar,
+  CssBaseline,
+  FormControlLabel,
+  Checkbox,
+  Grid,
+  Link as Link_,
+} from '@material-ui/core';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Container from '@material-ui/core/Container';
 import MenuIcon from "@material-ui/icons/Menu";
 import HomeIcon from "@material-ui/icons/Home";
-import HowToRegIcon from "@material-ui/icons/HowToReg";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import BookIcon from "@material-ui/icons/Book";
+import OpenLoginDialog from './LoginDialog'
 import NavigationDrawer from "../../shared/components/NavigationDrawer";
-
 const styles = theme => ({
   appBar: {
     boxShadow: theme.shadows[6],
@@ -43,10 +57,8 @@ const styles = theme => ({
 function NavBar(props) {
   const {
     classes,
-    openRegisterDialog,
-    openLoginDialog,
-    handleMobileDrawerOpen,
-    handleMobileDrawerClose,
+    OpenLoginDialog,
+  
     mobileDrawerOpen,
     selectedTab
   } = props;
@@ -62,16 +74,19 @@ function NavBar(props) {
       icon: <BookIcon className="text-white" />
     },
     {
-      name: "Register",
-      onClick: openRegisterDialog,
-      icon: <HowToRegIcon className="text-white" />
-    },
-    {
       name: "Login",
-      onClick: openLoginDialog,
+      onClick: OpenLoginDialog,
       icon: <LockOpenIcon className="text-white" />
     }
   ];
+  var [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
@@ -83,7 +98,7 @@ function NavBar(props) {
               display="inline"
               color="primary"
             >
-              Doge
+              Crypto
             </Typography>
             <Typography
               variant="h4"
@@ -98,44 +113,82 @@ function NavBar(props) {
             <Hidden mdUp>
               <IconButton
                 className={classes.menuButton}
-                onClick={handleMobileDrawerOpen}
+        
                 aria-label="Open Navigation"
               >
                 <MenuIcon color="primary" />
               </IconButton>
             </Hidden>
             <Hidden smDown>
-              {menuItems.map(element => {
-                if (element.link) {
-                  return (
-                    <Link
-                      key={element.name}
-                      to={element.link}
-                      className={classes.noDecoration}
-                      onClick={handleMobileDrawerClose}
-                    >
+
                       <Button
                         color="secondary"
                         size="large"
                         classes={{ text: classes.menuButtonText }}
                       >
-                        {element.name}
+                        Home
                       </Button>
-                    </Link>
-                  );
-                }
-                return (
-                  <Button
-                    color="secondary"
-                    size="large"
-                    onClick={element.onClick}
-                    classes={{ text: classes.menuButtonText }}
-                    key={element.name}
-                  >
-                    {element.name}
-                  </Button>
-                );
-              })}
+                      <Button
+                        color="secondary"
+                        size="large"
+                        onClick={handleOpen}
+                        classes={{ text: classes.menuButtonText }}
+                      >
+                        Login
+                      </Button>
+                      <Dialog open={open} onClose={handleClose}>
+                      <DialogContent>
+                        <Container component="main" maxWidth="xs">
+                          <CssBaseline />
+                          <div className={classes.paper}>
+                            <Avatar className={classes.avatar}>
+                              <LockOutlinedIcon />
+                            </Avatar>
+                            <Typography component="h1" variant="h5">
+                              Sign in
+                            </Typography>
+                            <form className={classes.form}>
+                              <TextField
+                                variant="outlined"
+                                margin="normal"
+                                required
+                                fullWidth
+                                id="email"
+                                label="Email Address"
+                                name="email"
+                                autoComplete="email"
+                                autoFocus
+                              />
+                              <TextField
+                                variant="outlined"
+                                margin="normal"
+                                required
+                                fullWidth
+                                name="password"
+                                label="Password"
+                                type="password"
+                                id="password"
+                                autoComplete="current-password"
+                              />
+                              <FormControlLabel
+                                control={<Checkbox value="remember" color="primary" />}
+                                label="Remember me"
+                              />
+                              <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="secondary"
+                                className={classes.submit}
+                              >
+                                Sign In
+                              </Button>
+                             
+                            </form>
+                          </div>
+                        </Container>
+                      </DialogContent>
+                    </Dialog>   
             </Hidden>
           </div>
         </Toolbar>
@@ -145,7 +198,7 @@ function NavBar(props) {
         anchor="right"
         open={mobileDrawerOpen}
         selectedItem={selectedTab}
-        onClose={handleMobileDrawerClose}
+       
       />
     </div>
   );
@@ -153,8 +206,7 @@ function NavBar(props) {
 
 NavBar.propTypes = {
   classes: PropTypes.object.isRequired,
-  handleMobileDrawerOpen: PropTypes.func,
-  handleMobileDrawerClose: PropTypes.func,
+
   mobileDrawerOpen: PropTypes.bool,
   selectedTab: PropTypes.string,
   openRegisterDialog: PropTypes.func.isRequired,

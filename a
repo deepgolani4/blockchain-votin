@@ -52,6 +52,16 @@
       },
       "totalVotesThisBlock": 2,
       "currentHash": "d8b429d068304cd733c53852e8b06be025b315f75a97ef886174fe51a3f5860a1cd4cfd8e584f08508cae9a37f0e2f5a553ab0f589c83ad58f662921a61627cf"
+    },
+    {
+      "timestamp": 1619801280370,
+      "votes": [],
+      "previousHash": "d8b429d068304cd733c53852e8b06be025b315f75a97ef886174fe51a3f5860a1cd4cfd8e584f08508cae9a37f0e2f5a553ab0f589c83ad58f662921a61627cf",
+      "count": {
+        "a": 2
+      },
+      "totalVotesThisBlock": 0,
+      "currentHash": "06ed9635bdd86f173ff09800f734739f90e3d62120a3a3ce3cc30855ca385dece7b1d2b367f12b359ad3a6f39562c34a0625598732de817db487289b2bb96bc6"
     }
   ]
 }

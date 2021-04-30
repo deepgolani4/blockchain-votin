@@ -8,14 +8,9 @@ const client = new Client({
 
 const run = async () => {
   await client.connect();
-
-  // await client.query("INSERT INTO VOTED(UID, VOTE) VALUES($1, $2)", [
-  //   "123456789809",
-  //   1,
-  // ]);
   const res = await client.query("SELECT * FROM VOTED");
   console.log(res.rows);
   await client.end();
 };
 
-run();
+module.exports = client;

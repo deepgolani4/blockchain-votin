@@ -1,6 +1,7 @@
 const luckyGen = require("../helpers/luckyNumGen");
 const pow = require("../helpers/modularExp");
 const Vote = require("../blockchain/blockchain").Vote;
+const client = require("../helpers/postgres");
 
 module.exports = {
   vote: (req, res) => {

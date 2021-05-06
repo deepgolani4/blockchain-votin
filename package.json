@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "npm run db; node server.js",
+    "db": "pg_ctl -D /home/sudonims/Documents/blockchain-voting/postgres start"
   },
   "author": "sudonims",
   "license": "MIT",

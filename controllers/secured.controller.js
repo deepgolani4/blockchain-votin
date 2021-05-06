@@ -36,14 +36,15 @@ module.exports = {
      * Decrypt with the symmetric key generated from PR Pass.
      */
 
-    const cipher = crypto.AES.decrypt(
-      crypto.enc.Base64.parse(req.body.payload).toString(),
-      secretAES,
-      {
-        mode: crypto.mode.CTR,
-      }
-    ).toString();
-
+    console.log(secretAES);
+    const cipher = crypto.AES.decrypt(req.body.payload, secretAES).toString(
+      crypto.enc.Utf8
+    );
+    // const cipher = crypto.AES.encrypt(
+    //   JSON.stringify(req.body),
+    //   secretAES
+    // ).toString();
+    console.log(cipher);
     req.body = JSON.parse(cipher);
 
     const { data, timestamp } = req.body;

@@ -29,7 +29,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import HomeIcon from "@material-ui/icons/Home";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import BookIcon from "@material-ui/icons/Book";
-import OpenLoginDialog from "./LoginDialog";
+
 import NavigationDrawer from "../../shared/components/NavigationDrawer";
 const styles = (theme) => ({
   appBar: {
@@ -150,10 +150,9 @@ function NavBar(props) {
                           margin="normal"
                           required
                           fullWidth
-                          id="email"
-                          label="Email Address"
-                          name="email"
-                          autoComplete="email"
+                          id="adharCard"
+                          label="Adhar Card No."
+                          name="adharCard"
                           autoFocus
                         />
                         <TextField
@@ -161,11 +160,10 @@ function NavBar(props) {
                           margin="normal"
                           required
                           fullWidth
-                          name="password"
-                          label="Password"
-                          type="password"
-                          id="password"
-                          autoComplete="current-password"
+                          name="birthDate"
+                          label="Birth-Date ( DD-MM-YYYY )"
+                          id="birthDate"
+                          
                         />
                         <FormControlLabel
                           control={

@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Button,
   Container,
@@ -6,8 +7,7 @@ import {
   Radio,
   RadioGroup,
 } from '@material-ui/core';
-import React from 'react';
-
+import { useSnackbar } from 'notistack';
 import Page from './page';
 var data = [
   {
@@ -34,6 +34,7 @@ var data = [
 ];
 
 export default function ShopSearch() {
+  const { enqueueSnackbar } = useSnackbar();
   const [party, setParty] = React.useState(data);
   const [value, setValue] = React.useState('');
 
@@ -49,7 +50,9 @@ export default function ShopSearch() {
     e.preventDefault();
     const { party } = e.target.elements;
 
-    alert('Vote Success');
+    enqueueSnackbar('Vote Success', {
+      variant: 'success',
+    });
   };
 
   return (

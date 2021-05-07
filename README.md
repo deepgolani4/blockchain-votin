@@ -85,3 +85,8 @@ openssl x509 -pubkey -in uidai_auth_stage.cer -noout
 
     g = 17
     p = 541
+
+## Postgres
+
+pg_ctl -D /home/sudonims/Documents/blockchain-voting/postgres start
+psql -h 127.0.0.1 -p 5432 -d voting

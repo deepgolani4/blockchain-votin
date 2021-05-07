@@ -1,152 +1,120 @@
-import React, { Component } from "react";
-import { Box, Container, Grid } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import ProductCard from './productCardFinal'
+import {
+  Button,
+  Container,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+} from '@material-ui/core';
+import React from 'react';
 
-import Page from "./page";
-import Table from '@material-ui/core/Table';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Radio from '@material-ui/core/Radio';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-const useStyles = makeStyles((theme) => ({
-  root: {
-    backgroundColor: theme.palette.background.dark,
-    minHeight: "100%",
-    paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3),
-  },
-  productCard: {
-    height: "100%",
-  },
-  mainRaised: {
-    padding: "10px 10px 10px 0px",
-    margin: "0px 1.9vw 0px",
-    borderRadius: "6px",
-    boxShadow:
-      "0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)",
-  },
-  frontline: {
-    fontSize: "30px",
-    padding: "10px 10px 10px 0px",
-    margin: "0px 1.9vw 0px",
-    fontFamily: "Helvetica",
-  },
-  check:{
-    marginLeft:"1.9vw"
-  }
-}));
-
+import Page from './page';
 var data = [
   {
     src:
-      "https://upload.wikimedia.org/wikipedia/commons/0/0e/Prime_Minister_of_India_Narendra_Modi.jpg",
-    title: "Narendra Modi",
-    id:'baal',
-    subTitle:
-      "it's your boi narendra modi, i am god and i mean it. congress is like my lil bitch who don't know how to do shit",
-    party: "BJP",
+      'https://upload.wikimedia.org/wikipedia/commons/0/0e/Prime_Minister_of_India_Narendra_Modi.jpg',
+    title: 'Narendra Modi',
+    id: 'modi',
+    party: 'BJP',
   },
   {
     src:
-      "https://upload.wikimedia.org/wikipedia/commons/0/0e/Prime_Minister_of_India_Narendra_Modi.jpg",
-    title: "Mamta Banrjee",
-    id:'modi',
-    subTitle:
-      "it's your boi narendra modi, i am god and i mean it. congress is like my lil bitch who don't know how to do shit",
-    party: "BJP",
+      'https://upload.wikimedia.org/wikipedia/commons/0/0e/Prime_Minister_of_India_Narendra_Modi.jpg',
+    title: 'Mamta Banerjee',
+    id: 'banerjee',
+    party: 'BJP',
   },
   {
     src:
-      "https://upload.wikimedia.org/wikipedia/commons/0/0e/Prime_Minister_of_India_Narendra_Modi.jpg",
-    title: "Narendra Modi",
-    id:'banrjee',
-    subTitle:
-      "it's your boi narendra modi, i am god and i mean it. congress is like my lil bitch who don't know how to do shit",
-    party: "BJP",
-  },
-  {
-    src:
-      "https://upload.wikimedia.org/wikipedia/commons/0/0e/Prime_Minister_of_India_Narendra_Modi.jpg",
-    title: "vijay Patil",
-    id:'patil',
-    subTitle:
-      "it's your boi narendra modi, i am god and i mean it. congress is like my lil bitch who don't know how to do shit",
-    party: "BJP",
+      'https://upload.wikimedia.org/wikipedia/commons/0/0e/Prime_Minister_of_India_Narendra_Modi.jpg',
+    title: 'vijay Patil',
+    id: 'patil',
+    party: 'BJP',
   },
 ];
 
 export default function ShopSearch() {
-  const classes = useStyles();
-  const [products, setProducts] = React.useState(data);
+  const [party, setParty] = React.useState(data);
+  const [value, setValue] = React.useState('');
 
   React.useEffect(() => {
-    setProducts((products) => [...products]);
+    // setProducts((products) => [...products]);
   }, []);
 
   const handleChange = (event) => {
     setValue(event.target.value);
   };
-  const [value, setValue] = React.useState('baal');
+
+  const submit = (e) => {
+    e.preventDefault();
+    const { party } = e.target.elements;
+
+    alert('Vote Success');
+  };
+
   return (
-    <>
-    
-      <Page className={(classes.root, classes.mainRaised)} title="vote for your self">
-        <p className={classes.frontline}> List of Cnadidates</p>
-        <Container maxWidth={false}>
-          {/* <Toolbar /> */}
-          <FormControl component="fieldset">
-  
-          <Grid item xs={12}>
-          <TableContainer>
-            <Table>
-              <TableHead>
-              <RadioGroup value="datas" name="dataset" onChange={handleChange}>
-                <TableRow>
-                  <TableCell style={{paddingRight :'5vh'}}></TableCell>
-                  <TableCell className={classes.check} style={{paddingRight :'8vh'}}> photo</TableCell>
-                  <TableCell style={{paddingRight :'35vh'}}>Name of Candidates</TableCell>          
-                  <TableCell style={{paddingRight :'43vh'}}>Cover Letter</TableCell>
-                  <TableCell>Party</TableCell>
-                  <TableCell >Select the appropiate button</TableCell>
-                  </TableRow>
-                  
-                  {products.map((product) => {
+    <Page title="Vote">
+      <p className="text-center font-black text-3xl">List of Candidates</p>
+      <Container>
+        <form onSubmit={submit}>
+          <FormControl style={{ width: '100%' }}>
+            <RadioGroup value={value} name="party" onChange={handleChange}>
+              <table className="text-left table-auto">
+                <thead className="bg-black flex text-white w-100 border-2 border-gray-700 rounded-lg">
+                  <tr className="flex w-full mb-4 text-center">
+                    <th className="p-4 w-1/4">Image</th>
+                    <th className="p-4 w-1/4">Name</th>
+                    <th className="p-4 w-1/4">Candidate Name</th>
+                    <th className="p-4 w-1/4">Choose</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-grey-light flex flex-col items-center overflow-y-scroll w-100">
+                  {party.map((par_) => {
                     return (
-                      <TableRow>
-                      <TableCell>
-                        <img
-                          alt={product.name}
-                          height="150px"
-                          width="150px"
-                          src={product.src}
-                        />
-                      </TableCell>
-                      <TableCell>{product.title}</TableCell>
-                      <TableCell> {product.subTitle} </TableCell>
-                      <TableCell> {product.party} </TableCell>
-                      <TableCell></TableCell><TableCell></TableCell>
-                      <TableCell>
-                        <FormControlLabel control={<Radio />} value={product.title} label={ " -- " + product.title }  />
-                      </TableCell>
-                    </TableRow>
+                      <tr className="text-center flex w-full mb-4">
+                        <td className="flex justify-center p-4 w-1/4">
+                          <img
+                            src={par_.src}
+                            height={100}
+                            width={100}
+                            alt={par_.id}
+                          />
+                        </td>
+                        <td className="flex justify-center p-4 w-1/4">
+                          <span className="inline-block align-middle">
+                            {par_.party}
+                          </span>
+                        </td>
+                        <td className="flex justify-center p-4 w-1/4">
+                          <span className="inline-block align-middle">
+                            {par_.title}
+                          </span>
+                        </td>
+                        <td className="flex justify-center p-4 w-1/4">
+                          <FormControlLabel
+                            value={par_.id}
+                            control={<Radio />}
+                          />
+                        </td>
+                      </tr>
                     );
-                    // return <ProductCard product={product} />;
                   })}
-                </RadioGroup>
-              </TableHead>
-            </Table>
-          </TableContainer>
-        </Grid>
-        </FormControl>
-          <Box mt={3} display="flex" justifyContent="center"></Box>
-        </Container>
-      </Page>
-    </>
+                </tbody>
+              </table>
+            </RadioGroup>
+          </FormControl>
+          <FormControl style={{ justifyContent: 'center' }}>
+            <Button
+              style={{ margin: 70 }}
+              color="primary"
+              type="submit"
+              variant="contained"
+            >
+              Submit Vote
+            </Button>
+          </FormControl>
+        </form>
+      </Container>
+    </Page>
   );
 }

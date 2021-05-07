@@ -1,6 +1,5 @@
-import React, { memo } from "react";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import React, { memo } from 'react';
+import { useSnackbar } from 'notistack';
 import {
   AppBar,
   Toolbar,
@@ -9,36 +8,27 @@ import {
   Hidden,
   IconButton,
   withStyles,
-} from "@material-ui/core";
-import {
-  List,
-  ListItem,
   Dialog,
   TextField,
   DialogContent,
   Avatar,
   CssBaseline,
-  FormControlLabel,
-  Checkbox,
-  Grid,
-  Link as Link_,
-} from "@material-ui/core";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Container from "@material-ui/core/Container";
-import MenuIcon from "@material-ui/icons/Menu";
-import HomeIcon from "@material-ui/icons/Home";
-import LockOpenIcon from "@material-ui/icons/LockOpen";
-import BookIcon from "@material-ui/icons/Book";
-
-import NavigationDrawer from "../../shared/components/NavigationDrawer";
+} from '@material-ui/core';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Container from '@material-ui/core/Container';
+import MenuIcon from '@material-ui/icons/Menu';
+import axios from 'axios';
+import { server } from '../../serverChoose';
+import VoterContext from '../../VoterContext';
+import { useHistory } from 'react-router';
 const styles = (theme) => ({
   appBar: {
     boxShadow: theme.shadows[6],
     backgroundColor: theme.palette.common.white,
   },
   toolbar: {
-    display: "flex",
-    justifyContent: "space-between",
+    display: 'flex',
+    justifyContent: 'space-between',
   },
   menuButtonText: {
     fontSize: theme.typography.body1.fontSize,
@@ -49,36 +39,16 @@ const styles = (theme) => ({
     fontWeight: 400,
   },
   noDecoration: {
-    textDecoration: "none !important",
+    textDecoration: 'none !important',
   },
 });
 
 function NavBar(props) {
-  const {
-    classes,
-    OpenLoginDialog,
-
-    mobileDrawerOpen,
-    selectedTab,
-  } = props;
-  const menuItems = [
-    {
-      link: "/",
-      name: "Home",
-      icon: <HomeIcon className="text-white" />,
-    },
-    {
-      link: "/blog",
-      name: "Blog",
-      icon: <BookIcon className="text-white" />,
-    },
-    {
-      name: "Login",
-      onClick: OpenLoginDialog,
-      icon: <LockOpenIcon className="text-white" />,
-    },
-  ];
-  var [open, setOpen] = React.useState(false);
+  const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
+  const [open, setOpen] = React.useState(false);
+  const { voterDetails, setVoterDetails } = React.useContext(VoterContext);
+  const { classes } = props;
 
   const handleOpen = () => {
     setOpen(true);
@@ -86,6 +56,37 @@ function NavBar(props) {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const submit = (e) => {
+    e.preventDefault();
+    const { aadhar, birth } = e.target.elements;
+
+    history.push('/voting');
+    axios
+      .post(server + '/verifyaadhar', {
+        uid: aadhar.value,
+        bday: birth.value,
+      })
+      .then((res_) => {
+        if (res_.status === 200) {
+          console.log(res_.data);
+          setVoterDetails(res_.data);
+          enqueueSnackbar('Verification Success', {
+            variant: 'success',
+          });
+          console.log(voterDetails);
+        } else {
+          throw new Error('Error occured');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        enqueueSnackbar('Error Occured', {
+          variant: 'error',
+        });
+      });
+  };
+
   return (
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
@@ -144,7 +145,7 @@ function NavBar(props) {
                       <Typography component="h1" variant="h5">
                         Sign in
                       </Typography>
-                      <form className={classes.form}>
+                      <form className={classes.form} onSubmit={submit}>
                         <TextField
                           variant="outlined"
                           margin="normal"
@@ -152,7 +153,7 @@ function NavBar(props) {
                           fullWidth
                           id="adharCard"
                           label="Adhar Card No."
-                          name="adharCard"
+                          name="aadhar"
                           autoFocus
                         />
                         <TextField
@@ -160,16 +161,9 @@ function NavBar(props) {
                           margin="normal"
                           required
                           fullWidth
-                          name="birthDate"
+                          name="birth"
                           label="Birth-Date ( DD-MM-YYYY )"
                           id="birthDate"
-                          
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox value="remember" color="primary" />
-                          }
-                          label="Remember me"
                         />
                         <Button
                           type="submit"
@@ -178,7 +172,7 @@ function NavBar(props) {
                           color="secondary"
                           className={classes.submit}
                         >
-                          Sign In
+                          Verify
                         </Button>
                       </form>
                     </div>
@@ -189,23 +183,8 @@ function NavBar(props) {
           </div>
         </Toolbar>
       </AppBar>
-      <NavigationDrawer
-        menuItems={menuItems}
-        anchor="right"
-        open={mobileDrawerOpen}
-        selectedItem={selectedTab}
-      />
     </div>
   );
 }
-
-NavBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-
-  mobileDrawerOpen: PropTypes.bool,
-  selectedTab: PropTypes.string,
-  openRegisterDialog: PropTypes.func.isRequired,
-  openLoginDialog: PropTypes.func.isRequired,
-};
 
 export default withStyles(styles, { withTheme: true })(memo(NavBar));

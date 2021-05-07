@@ -1,7 +1,7 @@
-const reqBuild = require("../aadhar/xmls");
-const jwtSign = require("../helpers/jwtSign").sign;
-const genLucky = require("../helpers/luckyNumGen");
-const pow = require("../helpers/modularExp");
+const reqBuild = require('../aadhar/xmls');
+const jwtSign = require('../helpers/jwtSign').sign;
+const genLucky = require('../helpers/luckyNumGen');
+const pow = require('../helpers/modularExp');
 module.exports = {
   verifyAadhar: (req, res) => {
     try {
@@ -14,7 +14,7 @@ module.exports = {
        * used on deffie hellman shared key generation
        */
       const lucky = genLucky(req.body);
-      console.log("lucky", lucky);
+      console.log('lucky', lucky);
       /**
        * Token generated from server for authorization in requests
        */
@@ -38,11 +38,11 @@ module.exports = {
       res.status(200).send({
         serverPub,
         token: tkn,
-        ts: Date.now(),
+        timestamp: Date.now(),
       });
     } catch (err) {
       console.log(err);
-      res.status(503).send("error");
+      res.status(503).send('error');
     }
     // axios
     //   .post(

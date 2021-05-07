@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
 import Page from './page';
+import VoterContext from '../VoterContext';
 var data = [
   {
     src:
@@ -35,12 +36,20 @@ var data = [
 
 export default function ShopSearch() {
   const { enqueueSnackbar } = useSnackbar();
+  const { voterDetails } = React.useContext(VoterContext);
   const [party, setParty] = React.useState(data);
   const [value, setValue] = React.useState('');
 
   React.useEffect(() => {
     // setProducts((products) => [...products]);
   }, []);
+
+  // if (!voterDetails) {
+  //   enqueueSnackbar('Verify Aadhar First', {
+  //     variant: 'info',
+  //   });
+  //   window.location.href = '/';
+  // }
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -55,7 +64,7 @@ export default function ShopSearch() {
     });
   };
 
-  return (
+  return voterDetails ? (
     <Page title="Vote">
       <p className="text-center font-black text-3xl">List of Candidates</p>
       <Container>
@@ -119,5 +128,7 @@ export default function ShopSearch() {
         </form>
       </Container>
     </Page>
+  ) : (
+    <>No aadhar details were submitted, hence you cannot vote </>
   );
 }

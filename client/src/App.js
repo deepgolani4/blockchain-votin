@@ -1,16 +1,30 @@
 import React from 'react';
-import { Router } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
 import HomePage from './finalPage/App';
-var hist = createBrowserHistory();
+import VoterContext from './VoterContext';
 
 function App() {
+  const [voter, setVoter] = React.useState(null);
+
+  const updateVoter = (votes) => {
+    setVoter(votes);
+  };
+
   return (
-    <Router history={hist}>
-      <SnackbarProvider maxSnack={3}>
-        <HomePage />
-      </SnackbarProvider>
+    <Router>
+      <Switch>
+        <SnackbarProvider maxSnack={3}>
+          <VoterContext.Provider
+            value={{
+              voterDetails: voter,
+              setVoterDetails: updateVoter,
+            }}
+          >
+            <HomePage />
+          </VoterContext.Provider>
+        </SnackbarProvider>
+      </Switch>
     </Router>
   );
 }
